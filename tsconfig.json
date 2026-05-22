@@ -1,0 +1,19 @@
+{
+	"compilerOptions": {
+		"outDir": "./dist/",
+		"sourceMap": true,
+		"noImplicitAny": true,
+		"module": "nodenext",
+		"target": "es2024",
+		"rootDir": "./src/",
+		"allowImportingTsExtensions": true,
+		"noEmit": true,
+		"moduleResolution": "nodenext",
+		"typeRoots": ["node_modules/@types", "./src/types"],
+		"types": ["node"],
+		"alwaysStrict": true,
+		"esModuleInterop": true,
+		"noUnusedLocals": true
+	},
+	"include": ["./src/**/*"]
+}

@@ -1,0 +1,17 @@
+{
+	"name": "fastifyproject",
+	"version": "1.0.0",
+	"exports": "./src/server.ts",
+	"type": "module",
+	"scripts": {
+		"dev": "node --experimental-transform-types ./src/server.ts --enablefastifylogger",
+		"prod": "node --experimental-transform-types ./src/server.ts"
+	},
+	"devDependencies": {
+		"@types/node": "^25.6.0",
+		"typescript": "^6.0.2"
+	},
+	"dependencies": {
+		"fastify": "^5.8.4"
+	}
+}
