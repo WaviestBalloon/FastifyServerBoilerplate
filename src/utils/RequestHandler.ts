@@ -2,12 +2,6 @@ import type { FastifyReply, FastifyRequest } from "fastify";
 import { type EndpointRouteModule } from "./Generic.ts";
 import { GetRatelimit, RemoveRatelimit, SetRatelimit } from "./Ratelimit.ts";
 
-export function CleanEndpointURLForForwardfacing(endpointUrl: string): string {
-	let split = endpointUrl.split("/");
-	split.pop();
-	return split.join("/");
-}
-
 export async function RequestHandler(request: FastifyRequest, reply: FastifyReply, route: EndpointRouteModule) {
 	try {
 		const ip: string = request.headers["x-forwarded-for"] as string || request.ip;
@@ -20,11 +14,13 @@ export async function RequestHandler(request: FastifyRequest, reply: FastifyRepl
 			});
 		}
 
-		SetRatelimit(ip, route.EndpointConfig.Path, Date.now() + route.EndpointConfig.Ratelimit);
-		setTimeout(() => {
-			RemoveRatelimit(ip, route.EndpointConfig.Path);
-			console.log(`Revoked ${route.EndpointConfig.Path} ratelimit for ${ip}`);
-		}, route.EndpointConfig.Ratelimit);
+		if (route.EndpointConfig?.Ratelimit) {
+			SetRatelimit(ip, route.EndpointConfig.Path, Date.now() + route.EndpointConfig.Ratelimit);
+			setTimeout(() => {
+				RemoveRatelimit(ip, route.EndpointConfig.Path);
+				console.log(`Revoked ${route.EndpointConfig.Path} ratelimit for ${ip}`);
+			}, route.EndpointConfig.Ratelimit);
+		}
 		
 		await route.run(request, reply);
 	} catch (err) {
